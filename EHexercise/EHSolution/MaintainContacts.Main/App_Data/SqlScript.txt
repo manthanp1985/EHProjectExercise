@@ -1,0 +1,61 @@
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TblContact]') AND type in (N'U'))
+ALTER TABLE [dbo].[TblContact] DROP CONSTRAINT [DF_TblContacts_StampDate]
+GO
+/****** Object:  Table [dbo].[TblLookupStatus]    Script Date: 4/9/2017 9:08:31 PM ******/
+DROP TABLE [dbo].[TblLookupStatus]
+GO
+/****** Object:  Table [dbo].[TblContact]    Script Date: 4/9/2017 9:08:31 PM ******/
+DROP TABLE [dbo].[TblContact]
+GO
+/****** Object:  Table [dbo].[TblContact]    Script Date: 4/9/2017 9:08:31 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TblContact]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[TblContact](
+	[ContactID] [int] IDENTITY(1,1) NOT NULL,
+	[FirstName] [varchar](50) NOT NULL,
+	[LastName] [varchar](50) NOT NULL,
+	[Email] [varchar](100) NOT NULL,
+	[PhoneNumber] [varchar](20) NOT NULL,
+	[StatusID] [int] NOT NULL,
+	[LastModifiedDate] [datetime] NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_TblContact] PRIMARY KEY CLUSTERED 
+(
+	[ContactID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+/****** Object:  Table [dbo].[TblLookupStatus]    Script Date: 4/9/2017 9:08:32 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TblLookupStatus]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[TblLookupStatus](
+	[StatusID] [int] IDENTITY(1,1) NOT NULL,
+	[StatusCode] [varchar](10) NOT NULL,
+ CONSTRAINT [PK_TblLookupStatus] PRIMARY KEY CLUSTERED 
+(
+	[StatusID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DF_TblContacts_StampDate]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[TblContact] ADD  CONSTRAINT [DF_TblContacts_StampDate]  DEFAULT (getdate()) FOR [CreatedDate]
+END
+
+GO
+
+Insert into TblLookupStatus(StatusCode) values ('Active')
+GO
+
+Insert into TblLookupStatus(StatusCode) values ('Inactive')
+GO
